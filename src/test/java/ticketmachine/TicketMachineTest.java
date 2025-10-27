@@ -1,11 +1,14 @@
 package ticketmachine;
-
+// git add . 
+// git commit -m "tp"
+// git push 
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.*;
 
 class TicketMachineTest {
 	private static final int PRICE = 50; // Une constante
 
+	
 	private TicketMachine machine; // l'objet à tester
 
 	@BeforeEach
@@ -32,5 +35,69 @@ class TicketMachineTest {
 		// THEN La balance est mise à jour, les montants sont correctement additionnés
 		assertEquals(10 + 20, machine.getBalance(), "La balance n'est pas correctement mise à jour");
 	}
+
+	@Test 
+	void BalanceNotEnough () {
+		machine.insertMoney(PRICE - 10);
+		assertFalse(machine.printTicket());
+	} 
+	@Test 
+	void BalanceIsEnough (){
+		machine.insertMoney(PRICE);
+		assertTrue(machine.printTicket());
+	}
+	@Test
+
+	void Decrementation (){
+		machine.insertMoney(PRICE + 20); 
+		machine.printTicket(); 
+		assertEquals(machine.getBalance(),20 );
+	}
+ 	@Test 
+
+ 	void collect(){
+		machine.insertMoney(PRICE);
+		machine.printTicket(); 
+		assertEquals(PRICE, machine.getTotal());
+
+	}
+	@Test 
+
+ 	void GiveBackMoney (){
+		machine.insertMoney(PRICE + 10);
+		machine.printTicket(); 
+		assertEquals(10, machine.getBalance()); 
+	}
+
+	@Test
+
+	void TestRefund (){
+		machine.insertMoney(10);
+		machine.refund(); 
+		assertEquals(0, machine.getBalance() );
+	}
+
+	
+	@Test
+void NoNegative() {
+    assertThrows(
+        IllegalArgumentException.class,
+        () -> machine.insertMoney(-10),
+        "pas de montant negatif"
+    );
+}
+@Test 
+
+void NoNegativePrice () {
+	
+	assertThrows(
+		IllegalArgumentException.class, 
+		() -> new TicketMachine(-50),
+		"Ticket price must be positive"
+		);
+	
+}
+
+
 
 }
